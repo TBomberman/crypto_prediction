@@ -70,7 +70,7 @@ y[pos_id] = 1
 ensure_number(data)
 ensure_number(labels)
 
-train_fraction = 0.1
+train_fraction = 0.7
 cut = int(len(labels)*train_fraction)
 ids = np.arange(len(labels))
 np.random.shuffle(ids)
