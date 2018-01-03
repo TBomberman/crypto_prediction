@@ -10,8 +10,6 @@ from scipy.stats import linregress
 #from scikits.learn.metrics import roc_curve as roc, auc
 from sklearn.metrics import roc_curve as roc, auc
 from utilities import *
-#from functions import *
-from constants import *
 import re
 import pickle as cPickle
 import sys
@@ -49,8 +47,8 @@ class Partition():
                     test = [np.where(instname==item)[0][0] for item in testname]
                 else:
                     test = map(int,testname)
-            except (IndexError):
-                print ("Can't find test instants in the data set",Error)
+            except ((ValueError,IndexError)):
+                print ("Can't find test instants in the data set",IndexError)
                 sys.exit(1)
 
         val=np.array([])
@@ -62,8 +60,8 @@ class Partition():
                     val = [np.where(instname==item)[0][0] for item in valname]
                 else:
                     val = map(int,valname)
-            except (IndexError):
-                print ("Can't find test instants in the data set",Error)
+            except ((ValueError,IndexError)):
+                print ("Can't find test instants in the data set",IndexError)
                 sys.exit(1)
 
         train = np.array(train)
@@ -268,8 +266,8 @@ class Model(object):
         data=self.data[:,subset]
         self.varnames = self.varnames[subset]
         "Added new"
-        f.varids = np.array(subset)
-        f.nvariables = len(subset)-1
+        self.varids = np.array(subset)
+        self.nvariables = len(subset)-1
         self.__set_data__(data,filtering=False,normalizing=False)
 
     def __set_data__(self,data,filtering=False,normalizing=False):
@@ -320,13 +318,13 @@ class Model(object):
 
         if self.normalizer and normalizing:
                  print ("===>Normalizing the data...")
-                 f.normalizer.map_data(self.data[trainidx,:])
+                 function.normalizer.map_data(self.data[trainidx,:])
                  self.data=self.normalizer.transmap_data(self.data)
 
 	#if self.function != None and self.data != None :
 	#    self.function.fit(self.data[trainidx,:])
         if not self.data.any():
-            unction.set_data(self.data[trainidx,:])
+            self.set_data(self.data[trainidx,:])
 
             self.varnames = self.varnames
 
