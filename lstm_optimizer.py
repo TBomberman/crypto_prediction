@@ -13,7 +13,7 @@ import random
 # local variables
 dropout = 0.2
 dense = 10
-batch_size = 1
+batch_size = 10000
 nb_epoch =20 #1000 cutoff 1 #3000 cutoff  2 and
 
 # for reproducibility
