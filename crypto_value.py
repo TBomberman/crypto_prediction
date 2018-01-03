@@ -53,9 +53,8 @@ labels = (data_frame[' Close'].as_matrix()[:-1] - data_frame[' Close'].as_matrix
 #labels = data_frame['Buy Sell'].as_matrix().reshape(len(data_frame['Buy Sell']),1)
 labels = labels[0:labels.shape[0]-(look_back + lag),]
 
-data = np.atleast_3d(np.array([dataTable[start:start + look_back] for start in range(lag, dataTable.shape[0] - (look_back))]))
+data = np.atleast_2d(np.array([dataTable[start:start + look_back] for start in range(lag, dataTable.shape[0] - (look_back))]))
 #data = np.array([dataTable[start:start + look_back] for start in range(0, dataTable.shape[0] - look_back)])
-data = data.reshape((data.shape[0],data.shape[1]*data.shape[2]))
 
 sklearn = True
 keras = False
@@ -63,7 +62,7 @@ tf = False
 
 # turn labels into binary
 y = np.zeros((len(labels), 1)).astype(int)
-pos_id = np.where(abs(labels) > cutoff)[0]
+pos_id = np.where(labels > cutoff)[0]
 y[pos_id] = 1
 
 # validate every data is a number
