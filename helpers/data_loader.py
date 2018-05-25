@@ -15,7 +15,6 @@ def load_csv(file):
             for row in reader:
                 expression.append(row)
 
-        print('gene expressions loaded. rows:  ' + str(len(expression)))
         return expression
 
 def load_descriptors(file):
