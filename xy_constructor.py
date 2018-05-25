@@ -1,6 +1,7 @@
 from helpers import data_loader as dl
 import numpy as np
 from lstm_optimizer import do_optimize
+from helpers.email_notifier import notify
 
 csv_rows = dl.load_csv('Data/CandlesJan2015-Dec2017.csv')
 headers = csv_rows.pop(0)
@@ -30,20 +31,26 @@ percentized = np.asarray(percentized, dtype=np.float16)
 # normalize it
 time_series_data = np.tanh(percentized)
 
-# batch it
-data_samples = []
-label_samples = []
-num_samples = len(time_series_data)
-for i in range(0, num_samples):
-    sample_data = []
-    for j in range(0, time_steps):
-        if i + j >= num_samples:
-            break
-        sample_data.append(time_series_data[i+j])
-    if len(sample_data) == time_steps:
-        data_samples.append(sample_data)
-        label_samples.append(time_series_labels[i+j])
+try:
+    for hyperparam in range(4, 6):
+        # batch it
+        time_steps = 2 ** hyperparam
+        data_samples = []
+        label_samples = []
+        num_samples = len(time_series_data)
+        for i in range(0, num_samples):
+            sample_data = []
+            for j in range(0, time_steps):
+                if i + j >= num_samples:
+                    break
+                sample_data.append(time_series_data[i+j])
+            if len(sample_data) == time_steps:
+                data_samples.append(sample_data)
+                label_samples.append(time_series_labels[i+j])
 
-data_samples = np.asarray(data_samples, dtype='float16')
-label_samples = np.asarray(label_samples, dtype='float16')
-do_optimize(2, data_samples, label_samples)
+        data_samples = np.asarray(data_samples, dtype='float16')
+        label_samples = np.asarray(label_samples, dtype='float16')
+        print("xy hyperparam:", hyperparam)
+        do_optimize(2, data_samples, label_samples)
+finally:
+    notify()

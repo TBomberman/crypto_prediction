@@ -6,7 +6,7 @@ from keras.utils import np_utils
 from keras.callbacks import History, EarlyStopping
 from random import sample
 from utilities import minmax, remove_constant_values, all_stats
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import keras_enums as enums
 import random
 from sklearn.model_selection import train_test_split
@@ -14,10 +14,10 @@ from helpers.callbacks import NEpochLogger
 
 # local variables
 dropout = 0.2
-batch_size = 1024
+batch_size = 2**10
 nb_epoch = 10000
 train_percentage = 0.7
-hidden_layer_count = 2
+hidden_layer_count = 1
 patience = 20
 
 # for reproducibility
