@@ -7,8 +7,8 @@ def notify(message="python script done"):
     server.starttls()
     server.login(email_address, pw)
     msg = "\r\n".join([
-        "From:", email_address,
-        "To:", email_address,
+        "From: " + email_address,
+        "To: " + email_address,
         "Subject: " + message,
         "",
         message
