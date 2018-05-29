@@ -3,39 +3,20 @@ import numpy as np
 from lstm_optimizer import do_optimize
 from helpers.email_notifier import notify
 
-def standardize(samples):
-    standardized = np.zeros(samples.shape)
-    for sample_idx in range(0, len(samples)):
-        sample = samples[sample_idx]
-        # sample has time steps and features
-        for feature_idx in range(0, sample.shape[1]):
-            feature = sample[:, feature_idx]
-            mean = np.mean(feature)
-            std = np.std(feature)
-            for value_idx in range(0, samples.shape[1]):
-                standardized_value = (feature[value_idx] - mean) / std
-                standardized[sample_idx, value_idx, feature_idx] = standardized_value
-    return standardized
+save_data = False
+load_data = True
 
-def preprocess(samples):
-    processed = np.zeros(samples.shape)
-    for sample_idx in range(0, len(samples)):
-        # standardize the prices
-        sample = samples[sample_idx]
-        # sample has time steps and features
-        for feature_idx in range(0, sample.shape[1]-1):
-            feature = sample[:, feature_idx]
-            mean = np.mean(feature)
-            std = np.std(feature)
-            for value_idx in range(0, samples.shape[1]):
-                standardized_value = (feature[value_idx] - mean) / std
-                processed[sample_idx, value_idx, feature_idx] = standardized_value
+def optAndNotify(data, labels):
+    try:
+        do_optimize(2, data, labels)
+    finally:
+        notify("cccy")
 
-        #normalize the
-        vol_feature_idx = sample.shape[1]
-        vol_feature = sample[:, feature_idx]
-        min = vol
-    return processed
+if load_data:
+    data = np.load("processedX.npz")['arr_0']
+    labels = np.load("processedY.npz")['arr_0']
+    optAndNotify(data, labels)
+    exit()
 
 csv_rows = dl.load_csv('Data/CandlesJan2015-May2018.txt')
 headers = csv_rows.pop(0)
@@ -89,9 +70,11 @@ for i in range(0, num_time_pts):
         data_samples.append(sample_data)
         label_samples.append(labels[i + j])
 
-try:
-    data_samples = np.asarray(data_samples, dtype='float16')
-    label_samples = np.asarray(label_samples, dtype='float16')
-    do_optimize(2, data_samples, label_samples)
-finally:
-    notify("cccy")
+data_samples = np.asarray(data_samples, dtype='float16')
+label_samples = np.asarray(label_samples, dtype='float16')
+
+if save_data:
+    np.savez("processedX.npz", data_samples)
+    np.savez("processedY.npz", label_samples)
+
+optAndNotify(data_samples, label_samples)
