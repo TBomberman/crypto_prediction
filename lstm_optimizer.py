@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from helpers.callbacks import NEpochLogger
 
 # local variables
-dropout = 0.2
+dropout = 0.0
 batch_size = 2**10
 nb_epoch = 10000
 train_percentage = 0.7
@@ -31,14 +31,16 @@ def do_optimize(nb_classes, data, labels, data_test=None, labels_test=None):
     neuron_count = time_steps * d
     if nb_classes:
         labels = np_utils.to_categorical(labels, nb_classes)
-    labels = labels.astype('float16')
     train_size = int(train_percentage * n)
     print("Train size:", train_size)
     test_size = int((1 - train_percentage) * n)
     X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size=train_size, test_size=test_size)
     X_val, X_test, y_val, y_test = train_test_split(X_test, y_test, train_size=0.5, test_size=0.5)
 
-    optimizer = enums.optimizers[1] #rmsprop
+    # 0: 'sgd', 1: 'rmsprop', 2: 'adagrad', 3: 'adadelta', 4: 'adam', 5: 'adamax', 6: 'nadam'
+    optimizer = enums.optimizers[4] #rmsprop
+    # 0: 'elu', 1: 'selu', 2: 'sigmoid', 3: 'linear', 4: 'softplus', 5: 'softmax', 6: 'tanh',
+    # 7: 'hard_sigmoid', 8: 'relu', 9: 'softsign'
     activation_input = enums.activation_functions[6]
     activation_hidden = enums.activation_functions[6]
     activation_output = enums.activation_functions[5]
