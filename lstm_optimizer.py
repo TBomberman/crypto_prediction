@@ -18,7 +18,7 @@ batch_size = 2**11
 nb_epoch = 10000
 train_percentage = 0.7
 hidden_layer_count = 1
-patience = 20
+patience = 10
 
 # for reproducibility
 # np.random.seed(1337)
