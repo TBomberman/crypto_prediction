@@ -70,12 +70,12 @@ def do_optimize(nb_classes, data, labels, data_test=None, labels_test=None):
 
         score = model.evaluate(X_test, y_test, verbose=0)
 
+        print('Test score:', score[0])
+        print('Test accuracy:', score[1])
+
         y_score_train = model.predict_proba(X_train)
         y_score_test = model.predict_proba(X_test)
         y_score_val = model.predict_proba(X_val)
-
-        print('Test score:', score[0])
-        print('Test accuracy:', score[1])
 
         if nb_classes > 1:
             train_stats = all_stats(y_train[:, 1], y_score_train[:, 1])
