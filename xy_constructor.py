@@ -41,29 +41,33 @@ for row in reversed(csv_rows): # oldest to newest
     pct_row.append(0.0) # for hv
     pct_row.append(0.0) # for ma
     percentized.append(pct_row)
+
+    # create labels
     if row[5] > last_row[5]:
         labels.append(1)
     else:
         labels.append(0)
     last_row = row
+
+    # save raw and working
     raw.append(raw_row)
 
 # np them
-percentized = np.log(np.asarray(percentized))
+percentized = np.asarray(percentized)
 # percentized = np.min(percentized, -1)
 labels = np.asarray(labels)
 raw = np.asarray(raw)
 
 # standardize the percents
-for i in range(0,4):
-    mean = np.mean(percentized[:,i])
-    std = np.std(percentized[:,i])
-    percentized[:, i] = (percentized[:,i] - mean) / std
+pctmean = np.mean(percentized[:, :4])
+pctstd = np.std(percentized[:, :4])
+percentized[:, :4] = (percentized[:, :4] - pctmean) / (pctstd*3)
 
-# standardize the volume
+# standardize the log volume
+percentized[:,4] = np.log(percentized[:,4])
 mean = np.mean(percentized[:,4])
 std = np.std(percentized[:,4])
-percentized[:, 4] = (percentized[:,4] - mean) / std
+percentized[:, 4] = (percentized[:,4] - mean) / (std*3)
 
 # for hyperparam in range (1,10):
 for hyperparam in [1]:
@@ -76,18 +80,18 @@ for hyperparam in [1]:
         ma = 0.0
         # less than look_back
         if i == 0:
-            std = 0.0
+            logstd = 0.0
             ma = 0.0
         elif i < look_back:
-            std = np.log(np.std(raw[0:i, 3]))
-            std = np.min(std, -1)
+            logstd = np.log(np.std(raw[0:i, 3]))
+            logstd = np.min(std, -1)
             ma = np.average(raw[0:i, 3])
-            ma = np.log(raw[i, 3]/ma)
+            ma = (raw[i, 3]/ma - pctmean) / (pctstd*3)
         else:
-            std = np.log(np.std(raw[i-look_back:i, 3]))
+            logstd = np.log(np.std(raw[i-look_back:i, 3]))
             ma = np.average(raw[i-look_back:i, 3])
-            ma = np.log(raw[i, 3] / ma)
-        hv = std / 3
+            ma = (raw[i, 3]/ma - pctmean) / (pctstd*3)
+        hv = logstd / 3
         hv = min(hv, 1)
         hv = max(hv, -1)
         percentized[i, 5] = hv
@@ -100,6 +104,9 @@ for hyperparam in [1]:
     # remove the first 31 rows that don't have the correct std because there wasn't enough historical data
     labels = labels[look_back - 1:]
     percentized = percentized[look_back -1:]
+
+    for i in range(0, 7):
+        print(np.std(percentized[:, i]))
 
     # batch it
     time_steps = 2 ** 5
