@@ -19,8 +19,8 @@ if load_data:
     optAndNotify(data, labels)
     quit()
 
-# csv_rows = dl.load_csv('Data/CandlesJan2015-May2018.txt')
-csv_rows = dl.load_csv('Data/Candles1DDec2014-May2018.csv')
+csv_rows = dl.load_csv('Data/CandlesJan2015-May2018.txt')
+# csv_rows = dl.load_csv('Data/Candles1HDec2014-May2018.csv')
 headers = csv_rows.pop(0)
 
 percentized = []
