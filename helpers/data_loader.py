@@ -56,7 +56,7 @@ def get_feature_dict(file, delimiter=',', key_index=0, use_int=False):
                     list.append(int(value))
                 my_dict[row[key_index]] = list
             return my_dict
-        return dict((row[key_index], row[1:]) for row in reader)
+        return dict((row[key_index], row) for row in reader)
 
 def printProgressBar (iteration, total, prefix = 'Progress', suffix = 'Complete', decimals = 1, length = 25, fill = '█'):
     """
