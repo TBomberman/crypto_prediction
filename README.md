@@ -1,7 +1,7 @@
 # crypto_prediction
 
 BidAskJan2014-Feb2017.csv <- this is old data that I have downloaded before
-CandlesJan2015-May2018.csv <- 15min candles for the last 2 years
+Candles15mJan2015-Jul2018.csv <- 15min candles for the last 2 years
 
 keras_test_lstm.py runs perfectly fine
 
