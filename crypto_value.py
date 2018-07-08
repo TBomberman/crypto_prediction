@@ -51,7 +51,7 @@ cutoff = 0
 look_back = 30
 lag = 1
 # read data as dataframe
-#data_frame = pd.read_csv('Data/CandlesJan2015-Dec2017.csv')
+#data_frame = pd.read_csv('Data/CandlesJan2015-May2018.csv')
 data_frame = pd.read_csv('Data/Bitcoin_DailyPrice_02-01-2018.csv',sep=";")
 #data_frame = pd.read_csv('C:/Users/home/Dropbox/crypto/ProcessedCandlesJan2015-Dec2017.txt')
 

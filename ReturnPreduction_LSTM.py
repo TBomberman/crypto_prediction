@@ -18,7 +18,7 @@ np.random.seed(7)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 warnings.filterwarnings("ignore")
 
-df = pd.read_csv('Data/CandlesJan2015-Dec2017.csv', skipinitialspace=True, header=0)
+df = pd.read_csv('Data/CandlesJan2015-May2018.csv', skipinitialspace=True, header=0)
 df = df.sort_values(by=['Timestamp'], ascending=[True])
 df.set_index('Timestamp', inplace=True)
 

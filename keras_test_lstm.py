@@ -9,7 +9,7 @@ def ensure_number(data):
     data[np.where(data == np.NAN), :] = 0
 
 #load data
-dataset = np.loadtxt('./Data/ProcessedCandlesJan2015-Dec2017.csv',
+dataset = np.loadtxt('./Data/ProcessedCandlesJan2015-May2018.csv',
                      skiprows=1, delimiter=",", usecols = range(1,7))
 
 # data set up
