@@ -34,6 +34,17 @@ def do_optimize(nb_classes, data, labels, data_test=None, labels_test=None):
     train_size = int(train_percentage * n)
     print("Train size:", train_size)
     test_size = int((1 - train_percentage) * n)
+
+    # predict the last section
+    # indexes = np.arange(start=n - test_size, stop=n)
+    # np.random.shuffle(indexes)
+    # X_test = data[indexes]
+    # y_test = labels[indexes]
+    # indexes = np.arange(n-test_size)
+    # np.random.shuffle(indexes)
+    # X_train = data[indexes]
+    # y_train = labels[indexes]
+
     X_train, X_test, y_train, y_test = train_test_split(data, labels, train_size=train_size, test_size=test_size)
     X_val, X_test, y_val, y_test = train_test_split(X_test, y_test, train_size=0.5, test_size=0.5)
 
@@ -76,6 +87,33 @@ def do_optimize(nb_classes, data, labels, data_test=None, labels_test=None):
         y_score_train = model.predict_proba(X_train)
         y_score_test = model.predict_proba(X_test)
         y_score_val = model.predict_proba(X_val)
+
+        print("up")
+        for i in range(0, 10):
+            threshold = 0.5 + 0.05*i
+            locations = np.where(y_score_test[:, 1] >= threshold)
+            n = len(locations[0])
+            if n <= 0:
+                continue
+            sum = np.sum(y_test[locations, 1])
+            acc = sum / n
+            print('Percentile', str(threshold), 'cross threshold', n, 'matching', sum, 'My Test accuracy:', acc)
+
+        print("down")
+        for i in range(0, 10):
+            threshold = 0.5 + 0.05*i
+            locations = np.where(y_score_test[:, 0] > threshold)
+            n = len(locations[0])
+            if n <= 0:
+                continue
+            sum = np.sum(y_test[locations, 0])
+            acc = sum / n
+            print('Percentile', str(threshold), 'cross threshold', n, 'matching', sum, 'My Test accuracy:', acc)
+        # y_score_val[np.where(y_score_val >= 0.5)] = 1
+        # y_score_val[np.where(y_score_val < 0.5)] = 0
+        # np.savetxt("predictions_val.csv", y_score_val[:, 1], delimiter=",")
+        # np.savetxt("predictions_test.csv", y_score_test[:, 1], delimiter=",")
+        # np.savetxt("predictions_train.csv", y_score_train[:, 1], delimiter=",")
 
         if nb_classes > 1:
             train_stats = all_stats(y_train[:, 1], y_score_train[:, 1])
