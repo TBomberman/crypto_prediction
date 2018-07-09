@@ -55,6 +55,31 @@ def do_optimize(nb_classes, data, labels):
     y_pred_test = model.predict_proba(X_test)
     y_pred_val = model.predict_proba(X_val)
 
+    np.savetxt("test.csv", y_pred_test[:, 1], delimiter=",")
+    np.savetxt("val.csv", y_pred_val[:, 1], delimiter=",")
+
+    print("up")
+    for i in range(0, 10):
+        threshold = 0.5 + 0.05 * i
+        locations = np.where(y_pred_test[:, 1] >= threshold)
+        n = len(locations[0])
+        if n <= 0:
+            continue
+        sum = np.sum(y_test[locations, 1])
+        acc = sum / n
+        print('Percentile', str(threshold), 'cross threshold', n, 'matching', sum, 'My Test accuracy:', acc)
+
+    print("down")
+    for i in range(0, 10):
+        threshold = 0.5 + 0.05 * i
+        locations = np.where(y_pred_test[:, 0] > threshold)
+        n = len(locations[0])
+        if n <= 0:
+            continue
+        sum = np.sum(y_test[locations, 0])
+        acc = sum / n
+        print('Percentile', str(threshold), 'cross threshold', n, 'matching', sum, 'My Test accuracy:', acc)
+
     train_stats = all_stats(Y_train[:, 1], y_pred_train[:, 1])
     val_stats = all_stats(Y_val[:, 1], y_pred_val[:, 1] )
     test_stats = all_stats(Y_test[:, 1], y_pred_test[:, 1], val_stats[-1])

@@ -11,7 +11,7 @@ import numpy as np
 import os
 
 class LstmEnsemble(Model):
-    def __init__(self, layers=None, name=None, n_estimators=10, patience=20, log_steps=5, dropout=0.2,
+    def __init__(self, layers=None, name=None, n_estimators=10, patience=10, log_steps=5, dropout=0.2,
                  input_activation='relu', hidden_activation='tanh', output_activation='softmax', optimizer='adam',
                  saved_models_path='ensemble_models/', time_steps=5):
         self.patience = patience
